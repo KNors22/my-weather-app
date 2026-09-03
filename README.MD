@@ -137,15 +137,6 @@ src/
 └── assets/             # Images, icons, and other visual assets
 ```
 
-## Submission Requirements
-
-The final submission should include:
-
-* A link to the GitHub repository containing the complete project.
-* This README file.
-* A link to the published website.
-* Any additional notes or explanations that help with evaluation.
-
 ## Authors and Acknowledgements
 
 * Author: Andrey Gonzalez

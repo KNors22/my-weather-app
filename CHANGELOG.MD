@@ -16,6 +16,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 * User-friendly error messages for invalid locations, failed requests, and missing API configuration.
 
 
+## [0.0.2] 2026-09-03
+
+### Added
+* Environment variable for the API key in `.env` file.
+* API integration with OpenWeatherMap for fetching current weather by city name or geographic coordinates.
+
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.0.2...HEAD)
+
+
 ## [0.0.1] 2026-09-03
 
 ### Added
