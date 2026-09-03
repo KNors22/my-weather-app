@@ -121,10 +121,12 @@ my-weather-app/
 │   ├── App.jsx         # Main application component
 │   ├── App.css         # App-specific styles
 │   ├── index.css       # Global styles
-│   └── main.jsx        # React entry point
+│   ├── main.jsx        # React entry point
+│   └── weatherApi.js   # API integration logic for OpenWeatherMap
 ├── index.html          # HTML entry file used by Vite
 ├── package.json        # Scripts, dependencies, and project metadata
 ├── vite.config.js      # Vite configuration
+├── .env                # Environment variables (e.g. API keys)
 └── README.MD           # Project documentation
 ```
 

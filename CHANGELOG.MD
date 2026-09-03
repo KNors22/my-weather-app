@@ -7,13 +7,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ## [Unreleased]
 
 ### Added
-* Dynamic weather search by city name or geographic coordinates.
-* Current weather display with temperature, humidity, wind speed, condition text, and weather icons.
 * Five-day weather forecast using OpenWeatherMap forecast data.
-* Celsius and Fahrenheit unit toggle.
 * Responsive layout for desktop, tablet, and mobile screens.
 * Smooth transitions or animations for a more polished user experience.
-* User-friendly error messages for invalid locations, failed requests, and missing API configuration.
+
+
+## [0.1.0] 2026-09-03
+
+### Added
+* `App.jsx` to manage the main application structure and state, and CSS styling.
+* Dynamic weather search by city name or geographic coordinates.
+* Celsius and Fahrenheit unit toggle.
+* Current weather display with temperature, humidity, wind speed, condition text, and weather icons.
+* Initial error messages for invalid locations or failed requests.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.0.2...v0.1.0)
 
 
 ## [0.0.2] 2026-09-03
@@ -22,8 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 * Environment variable for the API key in `.env` file.
 * API integration with OpenWeatherMap for fetching current weather by city name or geographic coordinates.
 
-
-[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.0.2...HEAD)
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.0.1...v0.0.2)
 
 
 ## [0.0.1] 2026-09-03
