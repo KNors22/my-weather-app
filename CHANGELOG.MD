@@ -12,6 +12,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 * Smooth transitions or animations for a more polished user experience.
 
 
+## [0.1.1] 2026-09-04
+
+### Added
+* Location validation to ensure user input is valid before making API requests.
+* Geocoding integration to convert city names into geographic coordinates for accurate weather data retrieval.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.1.0...v0.1.1)
+
+
 ## [0.1.0] 2026-09-03
 
 ### Added

@@ -1,5 +1,6 @@
-const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+import { getCoordinatesByCity } from '../utils/location';
 
+const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 /**
@@ -10,18 +11,23 @@ const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
  * @throws {Error} If the OpenWeather request fails.
  */
 async function fetchWeather(params) {
+  if (!API_KEY) {
+    throw new Error('Missing OpenWeatherMap API key.')
+  }
+  
   const query = new URLSearchParams({
     ...params,
     appid: API_KEY,
   });
 
   const response = await fetch(`${BASE_URL}?${query}`);
+  const data = await response.json();
 
   if (!response.ok) {
-    throw new Error("Could not find weather data.");
+    throw new Error(data.message || "Could not find weather data.");
   }
 
-  return response.json();
+  return data;
 }
 
 /**
@@ -31,9 +37,12 @@ async function fetchWeather(params) {
  * @param {string} [units="metric"] - The unit system for returned weather values.
  * @returns {Promise<Object>} The parsed weather data response.
  */
-export function getWeatherByCity(city, units = "metric") {
+export async function getWeatherByCity(city, units = "metric") {
+  const coordinates = await getCoordinatesByCity(city, API_KEY);
+
   return fetchWeather({
-    q: city,
+    lat: coordinates.lat,
+    lon: coordinates.lon,
     units,
   });
 }
@@ -47,6 +56,14 @@ export function getWeatherByCity(city, units = "metric") {
  * @returns {Promise<Object>} The parsed weather data response.
  */
 export function getWeatherByCoordinates(lat, lon, units = "metric") {
+  if (typeof lat === 'object') {
+    return fetchWeather({
+      lat: lat.lat,
+      lon: lat.lon,
+      units: lat.units || units,
+    });
+  }
+
   return fetchWeather({
     lat,
     lon,

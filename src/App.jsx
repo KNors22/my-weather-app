@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import { getWeatherByCity, getWeatherByCoordinates } from './weatherApi';
+import { getWeatherByCity, getWeatherByCoordinates } from './services/weatherApi';
+import { isValidLatitude, isValidLongitude } from "./utils/location";
 
 function App() {
   const [city, setCity] = useState("");
@@ -58,8 +59,9 @@ function App() {
   const searchByCoordinates = async (event) => {
     event.preventDefault();
 
-    if (!lat || !lon) {
-      setError("Please enter both latitude and longitude.");
+    // Input validation
+    if (!isValidLatitude(lat) || !isValidLongitude(lon)) {
+      setError("Please enter both valid latitude and longitude.");
       return;
     }
 
