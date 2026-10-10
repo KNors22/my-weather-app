@@ -7,9 +7,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ## [Unreleased]
 
 ### Added
-* Five-day weather forecast using OpenWeatherMap forecast data.
 * Responsive layout for desktop, tablet, and mobile screens.
 * Smooth transitions or animations for a more polished user experience.
+
+
+## [0.2.0] 2026-10-10
+
+### Added
+* Three-day and five-day weather forecast using OpenWeatherMap forecast data.
+* Toggle for switching between forecast durations without additional API requests.
+* Timezone-aware forecast grouping starting from the following day.
+* Responsive forecast layout with subtle animations and reduced-motion support.
+* Concurrent current-weather and forecast requests for faster loading.
+* Single geocoding request per city search to avoid redundant API calls.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.1.1...v0.2.0)
 
 
 ## [0.1.1] 2026-09-04

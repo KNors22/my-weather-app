@@ -32,7 +32,7 @@ Users should be able to enter location information, such as a city name or geogr
 
 * Node.js
 * npm
-* An OpenWeatherMap API key from https://openweathermap.org/api
+* OpenWeatherMap API key from https://openweathermap.org/api
 
 ### Setup
 

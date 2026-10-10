@@ -1,7 +1,28 @@
 import { useState } from "react";
 import "./App.css";
-import { getWeatherByCity, getWeatherByCoordinates } from './services/weatherApi';
+import {
+  getWeatherBundleByCity,
+  getWeatherBundleByCoordinates,
+} from "./services/weatherApi";
+import { normalizeForecast } from "./utils/forecast";
 import { isValidLatitude, isValidLongitude } from "./utils/location";
+
+const forecastDateFormatter = new Intl.DateTimeFormat(undefined, {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+
+/**
+ * Formats a forecast date without applying the browser's timezone.
+ *
+ * @param {string} date - A date formatted as YYYY-MM-DD.
+ * @returns {string} A localized weekday and date label.
+ */
+function formatForecastDate(date) {
+  return forecastDateFormatter.format(new Date(`${date}T00:00:00Z`));
+}
 
 function App() {
   const [city, setCity] = useState("");
@@ -10,12 +31,14 @@ function App() {
 
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState([]);
+  const [forecastDays, setForecastDays] = useState(3);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   /**
-   * Runs a weather request and updates loading, weather, and error state.
+   * Runs a combined weather request and updates weather and forecast state.
    *
    * @param {Function} weatherRequest - Function that returns a weather data promise.
    */
@@ -25,9 +48,11 @@ function App() {
 
     try {
       const data = await weatherRequest();
-      setWeather(data);
+      setWeather(data.weather);
+      setForecast(normalizeForecast(data.forecast));
     } catch (err) {
       setWeather(null);
+      setForecast([]);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -47,7 +72,7 @@ function App() {
       return;
     }
 
-    await fetchWeather(() => getWeatherByCity(city, units));
+    await fetchWeather(() => getWeatherBundleByCity(city, units));
   };
 
 
@@ -65,7 +90,9 @@ function App() {
       return;
     }
 
-    await fetchWeather(() => getWeatherByCoordinates({ lat, lon, units }));
+    await fetchWeather(() =>
+      getWeatherBundleByCoordinates(lat, lon, units),
+    );
   };
   
   /**
@@ -75,17 +102,18 @@ function App() {
    * @returns {Promise<void>}
    */
   const changeUnits = async (newUnits) => {
+    if (newUnits === units) return;
+
     setUnits(newUnits);
 
-    // Refresh weather using the new unit system 
     if (!weather) return;
 
     await fetchWeather(() =>
-      getWeatherByCoordinates(
-        weather.coord.lat, 
-        weather.coord.lon, 
-        newUnits 
-      )
+      getWeatherBundleByCoordinates(
+        weather.coord.lat,
+        weather.coord.lon,
+        newUnits,
+      ),
     );
   };
 
@@ -277,6 +305,76 @@ function App() {
                 </div>
               </div>
             </div>
+
+            {forecast.length > 0 && (
+              <section
+                className="forecast-section"
+                aria-labelledby="forecast-heading"
+              >
+                <div className="forecast-header">
+                  <h3 id="forecast-heading">Forecast</h3>
+
+                  <div
+                    className="forecast-toggle"
+                    role="group"
+                    aria-label="Forecast duration"
+                  >
+                    <button
+                      type="button"
+                      className={forecastDays === 3 ? "active" : ""}
+                      aria-pressed={forecastDays === 3}
+                      onClick={() => setForecastDays(3)}
+                    >
+                      3-Day
+                    </button>
+
+                    <button
+                      type="button"
+                      className={forecastDays === 5 ? "active" : ""}
+                      aria-pressed={forecastDays === 5}
+                      onClick={() => setForecastDays(5)}
+                    >
+                      5-Day
+                    </button>
+                  </div>
+                </div>
+
+                <div className="forecast-grid">
+                  {forecast.slice(0, forecastDays).map((day) => (
+                    <article className="forecast-day" key={day.date}>
+                      <time dateTime={day.date}>
+                        {formatForecastDate(day.date)}
+                      </time>
+
+                      {day.icon && (
+                        <img
+                          src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
+                          alt={day.description}
+                        />
+                      )}
+
+                      <p>{day.description}</p>
+
+                      <div className="forecast-temperatures">
+                        <span>
+                          <small>High</small>
+                          <strong>
+                            {Math.round(day.max)}{temperatureUnit}
+                          </strong>
+                        </span>
+
+                        <span>
+                          <small>Low</small>
+                          <strong>
+                            {Math.round(day.min)}{temperatureUnit}
+                          </strong>
+                        </span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
           </section>
         )}
 
