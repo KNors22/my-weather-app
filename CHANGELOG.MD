@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
-### Added
-* Responsive layout for desktop, tablet, and mobile screens.
-* Smooth transitions or animations for a more polished user experience.
+## [1.0.0] 2026-10-10
+
+### Changed
+* Enhanced responsive layout for desktop, tablet, and mobile screens.
+* Improved smooth transitions or animations for a more polished user experience.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.2.1...v1.0.0)
 
 
 ## [0.2.1] 2026-10-10

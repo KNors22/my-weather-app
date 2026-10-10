@@ -340,8 +340,12 @@ function App() {
                 </div>
 
                 <div className="forecast-grid">
-                  {forecast.slice(0, forecastDays).map((day) => (
-                    <article className="forecast-day" key={day.date}>
+                  {forecast.slice(0, forecastDays).map((day, index) => (
+                    <article
+                      className="forecast-day"
+                      key={day.date}
+                      style={{ animationDelay: `${index * 45}ms` }}
+                    >
                       <time dateTime={day.date}>
                         {formatForecastDate(day.date)}
                       </time>

@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 300ms;
+}
+
 body {
   margin: 0;
   font-family:
@@ -86,11 +92,14 @@ input {
   border-radius: 8px;
   padding: 11px 13px;
   outline: none;
-  transition: border 0.2s;
+  transition:
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease;
 }
 
 input:focus {
   border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 button {
@@ -100,10 +109,20 @@ button {
   background: #2563eb;
   color: white;
   font-weight: 600;
+  transition:
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-out);
 }
 
 button:hover {
   background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 .divider {
@@ -154,6 +173,19 @@ button:hover {
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  animation: weather-card-in var(--duration-normal) var(--ease-out);
+}
+
+@keyframes weather-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .weather-header {
@@ -284,7 +316,19 @@ button:hover {
   border-radius: 8px;
   background: #f8fafc;
   text-align: center;
-  animation: forecast-in 220ms ease-out both;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-out);
+  animation: forecast-in var(--duration-normal) var(--ease-out) both;
+}
+
+.forecast-day:hover {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  transform: translateY(-2px);
 }
 
 .forecast-day time {
@@ -335,12 +379,12 @@ button:hover {
 @keyframes forecast-in {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(8px) scale(0.98);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -417,7 +461,12 @@ button:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .forecast-day {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
