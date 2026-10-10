@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import {
   getWeatherBundleByCity,
   getWeatherBundleByCoordinates,
 } from "./services/weatherApi";
+import { formatLocationDateTime } from "./utils/dateTime";
 import { normalizeForecast, selectForecastDays } from "./utils/forecast";
 import { isValidLatitude, isValidLongitude } from "./utils/location";
 
@@ -46,9 +47,20 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [forecastDays, setForecastDays] = useState(3);
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!weather) return undefined;
+
+    const clockInterval = window.setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 30_000);
+
+    return () => window.clearInterval(clockInterval);
+  }, [weather]);
 
   /**
    * Runs a combined weather request and updates weather and forecast state.
@@ -63,6 +75,7 @@ function App() {
       const data = await weatherRequest();
       setWeather(data.weather);
       setForecast(normalizeForecast(data.forecast));
+      setCurrentTime(Date.now());
     } catch (err) {
       setWeather(null);
       setForecast([]);
@@ -234,6 +247,12 @@ function App() {
                 <h2>
                   {weather.name}, {weather.sys.country}
                 </h2>
+
+                <p className="location-date-time">
+                  <time dateTime={new Date(currentTime).toISOString()}>
+                    {formatLocationDateTime(currentTime, weather.timezone)}
+                  </time>
+                </p>
 
                 <p className="description">
                   {weather.weather[0].description}

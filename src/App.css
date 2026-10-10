@@ -199,6 +199,13 @@ button:active {
   font-size: 1.8rem;
 }
 
+.location-date-time {
+  margin: 7px 0 20px;
+  color: #475569;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
 .weather-header img {
   width: 90px;
   height: 90px;
