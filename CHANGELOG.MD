@@ -11,6 +11,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 * Smooth transitions or animations for a more polished user experience.
 
 
+## [0.2.1] 2026-10-10
+
+### Added
+* `.env.example` file to provide a template for environment variable configuration.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v0.2.0...v0.2.1)
+
+
 ## [0.2.0] 2026-10-10
 
 ### Added
