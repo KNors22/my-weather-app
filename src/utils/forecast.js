@@ -1,4 +1,4 @@
-const MAX_FORECAST_DAYS = 5;
+const MAX_NORMALIZED_DAYS = 6;
 const NOON_IN_MINUTES = 12 * 60;
 
 /**
@@ -38,8 +38,9 @@ function getDateKey(date) {
  *   min: number,
  *   max: number,
  *   icon: string,
- *   description: string
- * }>} Up to five daily forecasts beginning tomorrow.
+ *   description: string,
+ *   isToday: boolean
+ * }>} Daily forecasts including today when it exists in the API response.
  */
 export function normalizeForecast(forecastData, now = Date.now()) {
   const timezoneOffset = Number(forecastData?.city?.timezone) || 0;
@@ -63,7 +64,7 @@ export function normalizeForecast(forecastData, now = Date.now()) {
     const localDate = toLocationDate(timestamp, timezoneOffset);
     const date = getDateKey(localDate);
 
-    if (date <= today) {
+    if (date < today) {
       continue;
     }
 
@@ -90,7 +91,7 @@ export function normalizeForecast(forecastData, now = Date.now()) {
 
   return [...dailyGroups.entries()]
     .sort(([firstDate], [secondDate]) => firstDate.localeCompare(secondDate))
-    .slice(0, MAX_FORECAST_DAYS)
+    .slice(0, MAX_NORMALIZED_DAYS)
     .map(([date, group]) => ({
       date,
       timestamp: group.representative.dt,
@@ -99,5 +100,33 @@ export function normalizeForecast(forecastData, now = Date.now()) {
       icon: group.representative.weather?.[0]?.icon || "",
       description:
         group.representative.weather?.[0]?.description || "Forecast unavailable",
+      isToday: date === today,
     }));
+}
+
+/**
+ * Selects the requested number of forecast days.
+ * Future dates are preferred, but today is included when OpenWeather does not
+ * provide enough later calendar dates to fill the requested range.
+ *
+ * @param {Array<{isToday: boolean}>} dailyForecast - Normalized daily forecasts.
+ * @param {number} dayCount - Number of days to display.
+ * @returns {Array<Object>} Forecast entries to render.
+ */
+export function selectForecastDays(dailyForecast, dayCount) {
+  if (
+    !Array.isArray(dailyForecast) ||
+    !Number.isInteger(dayCount) ||
+    dayCount <= 0
+  ) {
+    return [];
+  }
+
+  const futureDays = dailyForecast.filter((day) => !day.isToday);
+
+  if (futureDays.length >= dayCount) {
+    return futureDays.slice(0, dayCount);
+  }
+
+  return dailyForecast.slice(0, dayCount);
 }

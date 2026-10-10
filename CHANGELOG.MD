@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+* Dark mode toggle for user interface customization.
+
+
+## [1.0.1] 2026-10-10
+
+### Fixed
+* Display 4-day forecast instead of 5-day for locations with a timezone of the next day (e.g. user in New York searching for a location in Sydney).
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v1.0.0...v1.0.1)
+
+
 ## [1.0.0] 2026-10-10
 
 ### Changed

@@ -4,7 +4,7 @@ import {
   getWeatherBundleByCity,
   getWeatherBundleByCoordinates,
 } from "./services/weatherApi";
-import { normalizeForecast } from "./utils/forecast";
+import { normalizeForecast, selectForecastDays } from "./utils/forecast";
 import { isValidLatitude, isValidLongitude } from "./utils/location";
 
 const forecastDateFormatter = new Intl.DateTimeFormat(undefined, {
@@ -14,14 +14,27 @@ const forecastDateFormatter = new Intl.DateTimeFormat(undefined, {
   timeZone: "UTC",
 });
 
+const forecastMonthDayFormatter = new Intl.DateTimeFormat(undefined, {
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+
 /**
  * Formats a forecast date without applying the browser's timezone.
  *
  * @param {string} date - A date formatted as YYYY-MM-DD.
+ * @param {boolean} isToday - Whether the date is current in the searched location.
  * @returns {string} A localized weekday and date label.
  */
-function formatForecastDate(date) {
-  return forecastDateFormatter.format(new Date(`${date}T00:00:00Z`));
+function formatForecastDate(date, isToday) {
+  const forecastDate = new Date(`${date}T00:00:00Z`);
+
+  if (isToday) {
+    return `Today, ${forecastMonthDayFormatter.format(forecastDate)}`;
+  }
+
+  return forecastDateFormatter.format(forecastDate);
 }
 
 function App() {
@@ -119,6 +132,7 @@ function App() {
 
   const temperatureUnit = units === "metric" ? "°C" : "°F";
   const windUnit = units === "metric" ? "m/s" : "mph";
+  const visibleForecast = selectForecastDays(forecast, forecastDays);
 
   return (
     <main className="app">
@@ -306,7 +320,7 @@ function App() {
               </div>
             </div>
 
-            {forecast.length > 0 && (
+            {visibleForecast.length > 0 && (
               <section
                 className="forecast-section"
                 aria-labelledby="forecast-heading"
@@ -340,14 +354,14 @@ function App() {
                 </div>
 
                 <div className="forecast-grid">
-                  {forecast.slice(0, forecastDays).map((day, index) => (
+                  {visibleForecast.map((day, index) => (
                     <article
                       className="forecast-day"
                       key={day.date}
                       style={{ animationDelay: `${index * 45}ms` }}
                     >
                       <time dateTime={day.date}>
-                        {formatForecastDate(day.date)}
+                        {formatForecastDate(day.date, day.isToday)}
                       </time>
 
                       {day.icon && (
