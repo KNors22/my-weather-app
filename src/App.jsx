@@ -10,6 +10,7 @@ import { normalizeForecast, selectForecastDays } from "./utils/forecast";
 import { isValidLatitude, isValidLongitude } from "./utils/location";
 
 const THEME_STORAGE_KEY = "weather-app-theme";
+const CURRENT_YEAR = new Date().getFullYear();
 
 /**
  * Gets the saved theme or falls back to the operating-system preference.
@@ -513,6 +514,34 @@ function App() {
           </div>
         )}
       </div>
+
+      <footer className="app-footer">
+        <p>&copy; {CURRENT_YEAR} Andrey Gonzalez</p>
+
+        <nav aria-label="Project resources">
+          <a
+            href="https://github.com/KNors22/my-weather-app"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://openweathermap.org/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            OpenWeather
+          </a>
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noreferrer"
+          >
+            OpenStreetMap
+          </a>
+        </nav>
+      </footer>
     </main>
   );
 }

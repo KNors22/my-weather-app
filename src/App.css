@@ -82,11 +82,14 @@ button {
 }
 
 .app {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   padding: 40px 20px;
 }
 
 .weather-container {
+  flex: 1 0 auto;
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
@@ -618,6 +621,51 @@ button:active {
   color: var(--text-strong);
 }
 
+/* Footer */
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  max-width: 700px;
+  margin: 42px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.app-footer p {
+  margin: 0;
+}
+
+.app-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.app-footer a {
+  color: var(--secondary-text);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.app-footer a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.app-footer a:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 /* Mobile */
 
 @media (max-width: 600px) {
@@ -666,6 +714,18 @@ button:active {
 
   .forecast-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .app-footer nav {
+    justify-content: flex-start;
+    gap: 14px;
   }
 }
 
