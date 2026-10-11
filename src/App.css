@@ -6,6 +6,53 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
   --duration-normal: 300ms;
+  --page-bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-subtle: #f8fafc;
+  --surface-hover: #ffffff;
+  --text: #0f172a;
+  --text-strong: #334155;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --border: #cbd5e1;
+  --border-soft: #e2e8f0;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --on-accent: #ffffff;
+  --secondary-bg: #e2e8f0;
+  --secondary-hover: #cbd5e1;
+  --secondary-text: #475569;
+  --error-bg: #fee2e2;
+  --error-text: #991b1b;
+  --focus-ring: rgba(59, 130, 246, 0.15);
+  --card-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  --hover-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --page-bg: #17181a;
+  --surface: #232528;
+  --surface-subtle: #2c2f33;
+  --surface-hover: #34383d;
+  --text: #f5f7fa;
+  --text-strong: #e5e7eb;
+  --text-muted: #aeb4bd;
+  --text-faint: #8f98a3;
+  --border: #555b64;
+  --border-soft: #3b4047;
+  --accent: #3568bd;
+  --accent-hover: #4779ca;
+  --on-accent: #ffffff;
+  --secondary-bg: #34383d;
+  --secondary-hover: #42474e;
+  --secondary-text: #e5e7eb;
+  --error-bg: #4c2528;
+  --error-text: #ffc9ce;
+  --focus-ring: rgba(91, 141, 239, 0.3);
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.32);
+  --hover-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+  color-scheme: dark;
 }
 
 body {
@@ -18,8 +65,11 @@ body {
     "Segoe UI",
     sans-serif;
 
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--page-bg);
+  color: var(--text);
+  transition:
+    background-color var(--duration-normal) ease,
+    color var(--duration-normal) ease;
 }
 
 button,
@@ -44,28 +94,97 @@ button {
 
 /* Header */
 
-header {
+.app-header {
+  position: relative;
   text-align: center;
   margin-bottom: 30px;
 }
 
-header h1 {
+.app-header h1 {
   margin: 0 0 8px;
   font-size: 2.4rem;
 }
 
-header p {
+.app-header p {
   margin: 0;
-  color: #64748b;
+  color: var(--text-muted);
+}
+
+.theme-control {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  user-select: none;
+}
+
+.theme-control input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.theme-switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--secondary-bg);
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
+}
+
+.theme-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--secondary-text);
+  transition:
+    background-color var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.theme-control input:checked + .theme-switch {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.theme-control input:checked + .theme-switch::after {
+  background: var(--on-accent);
+  transform: translateX(18px);
+}
+
+.theme-control input:focus-visible + .theme-switch {
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 /* Search */
 
 .search-section {
-  background: white;
+  background: var(--surface);
   padding: 24px;
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--card-shadow);
+  transition:
+    background-color var(--duration-normal) ease,
+    box-shadow var(--duration-normal) ease;
 }
 
 .search-form,
@@ -88,9 +207,11 @@ label {
 
 input {
   width: 100%;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 11px 13px;
+  background: var(--surface);
+  color: var(--text);
   outline: none;
   transition:
     border-color var(--duration-fast) ease,
@@ -98,16 +219,20 @@ input {
 }
 
 input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+input::placeholder {
+  color: var(--text-faint);
 }
 
 button {
   border: none;
   border-radius: 8px;
   padding: 11px 18px;
-  background: #2563eb;
-  color: white;
+  background: var(--accent);
+  color: var(--on-accent);
   font-weight: 600;
   transition:
     background-color var(--duration-fast) ease,
@@ -117,7 +242,7 @@ button {
 }
 
 button:hover {
-  background: #1d4ed8;
+  background: var(--accent-hover);
   transform: translateY(-1px);
 }
 
@@ -130,7 +255,7 @@ button:active {
   align-items: center;
   gap: 12px;
   margin: 22px 0;
-  color: #94a3b8;
+  color: var(--text-faint);
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -139,7 +264,7 @@ button:active {
 .divider::after {
   content: "";
   height: 1px;
-  background: #e2e8f0;
+  background: var(--border-soft);
   flex: 1;
 }
 
@@ -150,19 +275,19 @@ button:active {
   align-items: center;
   gap: 8px;
   margin-top: 22px;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 .units button {
   padding: 7px 12px;
-  background: #e2e8f0;
-  color: #475569;
+  background: var(--secondary-bg);
+  color: var(--secondary-text);
 }
 
 .units button.active {
-  background: #2563eb;
-  color: white;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 /* Weather Card */
@@ -170,9 +295,12 @@ button:active {
 .weather-card {
   margin-top: 25px;
   padding: 30px;
-  background: white;
+  background: var(--surface);
   border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--card-shadow);
+  transition:
+    background-color var(--duration-normal) ease,
+    box-shadow var(--duration-normal) ease;
   animation: weather-card-in var(--duration-normal) var(--ease-out);
 }
 
@@ -201,7 +329,7 @@ button:active {
 
 .location-date-time {
   margin: 7px 0 20px;
-  color: #475569;
+  color: var(--secondary-text);
   font-size: 0.86rem;
   line-height: 1.4;
 }
@@ -213,7 +341,7 @@ button:active {
 
 .description {
   margin: 5px 0 0;
-  color: #64748b;
+  color: var(--text-muted);
   text-transform: capitalize;
 }
 
@@ -225,7 +353,7 @@ button:active {
 }
 
 .feels-like {
-  color: #64748b;
+  color: var(--text-muted);
   margin-top: 8px;
 }
 
@@ -243,8 +371,9 @@ button:active {
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: #f8fafc;
+  background: var(--surface-subtle);
   border-radius: 12px;
+  transition: background-color var(--duration-normal) ease;
 }
 
 .detail-icon {
@@ -259,7 +388,7 @@ button:active {
 
 .detail-label {
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .detail strong {
@@ -271,7 +400,7 @@ button:active {
 .forecast-section {
   margin-top: 30px;
   padding-top: 24px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--border-soft);
 }
 
 .forecast-header {
@@ -291,23 +420,24 @@ button:active {
   display: inline-flex;
   padding: 3px;
   border-radius: 8px;
-  background: #e2e8f0;
+  background: var(--secondary-bg);
+  transition: background-color var(--duration-normal) ease;
 }
 
 .forecast-toggle button {
   padding: 7px 11px;
   background: transparent;
-  color: #475569;
+  color: var(--secondary-text);
   font-size: 0.82rem;
 }
 
 .forecast-toggle button:hover {
-  background: #cbd5e1;
+  background: var(--secondary-hover);
 }
 
 .forecast-toggle button.active {
-  background: #2563eb;
-  color: white;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .forecast-grid {
@@ -319,9 +449,9 @@ button:active {
 .forecast-day {
   min-width: 0;
   padding: 14px 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-soft);
   border-radius: 8px;
-  background: #f8fafc;
+  background: var(--surface-subtle);
   text-align: center;
   transition:
     background-color var(--duration-fast) ease,
@@ -332,15 +462,15 @@ button:active {
 }
 
 .forecast-day:hover {
-  border-color: #cbd5e1;
-  background: #ffffff;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  border-color: var(--border);
+  background: var(--surface-hover);
+  box-shadow: var(--hover-shadow);
   transform: translateY(-2px);
 }
 
 .forecast-day time {
   display: block;
-  color: #334155;
+  color: var(--text-strong);
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -356,7 +486,7 @@ button:active {
   min-height: 2.5em;
   margin: 0 0 12px;
   overflow-wrap: anywhere;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.76rem;
   line-height: 1.25;
   text-transform: capitalize;
@@ -375,7 +505,7 @@ button:active {
 }
 
 .forecast-temperatures small {
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.65rem;
 }
 
@@ -401,21 +531,24 @@ button:active {
   margin-top: 20px;
   padding: 15px;
   text-align: center;
-  color: #475569;
+  color: var(--secondary-text);
 }
 
 .error {
   margin-top: 20px;
   padding: 15px;
   border-radius: 10px;
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--error-bg);
+  color: var(--error-text);
+  transition:
+    background-color var(--duration-normal) ease,
+    color var(--duration-normal) ease;
 }
 
 .empty-state {
   text-align: center;
   margin-top: 50px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .empty-state span {
@@ -423,7 +556,7 @@ button:active {
 }
 
 .empty-state h2 {
-  color: #334155;
+  color: var(--text-strong);
 }
 
 /* Mobile */
@@ -433,8 +566,14 @@ button:active {
     padding: 25px 15px;
   }
 
-  header h1 {
+  .app-header h1 {
     font-size: 2rem;
+  }
+
+  .theme-control {
+    position: static;
+    justify-content: center;
+    margin-top: 14px;
   }
 
   .coordinate-inputs {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import "./App.css";
 import {
   getWeatherBundleByCity,
@@ -7,6 +7,26 @@ import {
 import { formatLocationDateTime } from "./utils/dateTime";
 import { normalizeForecast, selectForecastDays } from "./utils/forecast";
 import { isValidLatitude, isValidLongitude } from "./utils/location";
+
+const THEME_STORAGE_KEY = "weather-app-theme";
+
+/**
+ * Gets the saved theme or falls back to the operating-system preference.
+ *
+ * @returns {boolean} True when dark mode should be enabled.
+ */
+function getInitialDarkMode() {
+  try {
+    const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+    if (savedTheme === "dark") return true;
+    if (savedTheme === "light") return false;
+  } catch {
+    // Local storage can be unavailable in privacy-restricted browser contexts.
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
 
 const forecastDateFormatter = new Intl.DateTimeFormat(undefined, {
   weekday: "short",
@@ -48,9 +68,21 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [forecastDays, setForecastDays] = useState(3);
   const [currentTime, setCurrentTime] = useState(() => Date.now());
+  const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useLayoutEffect(() => {
+    const theme = isDarkMode ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
+
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // The selected theme still applies when persistence is unavailable.
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     if (!weather) return undefined;
@@ -150,9 +182,21 @@ function App() {
   return (
     <main className="app">
       <div className="weather-container">
-        <header>
-          <h1>Weather App</h1>
-          <p>Check the current weather anywhere in the world.</p>
+        <header className="app-header">
+          <div>
+            <h1>Weather App</h1>
+            <p>Check the current weather anywhere in the world.</p>
+          </div>
+
+          <label className="theme-control">
+            <span>Dark mode</span>
+            <input
+              type="checkbox"
+              checked={isDarkMode}
+              onChange={(event) => setIsDarkMode(event.target.checked)}
+            />
+            <span className="theme-switch" aria-hidden="true" />
+          </label>
         </header>
 
         <section className="search-section">

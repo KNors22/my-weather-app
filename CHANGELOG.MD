@@ -7,7 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ## [Unreleased]
 
 ### Added
-* Dark mode toggle for user interface customization.
+* Search by map click to allow users to select a location directly on an interactive map for weather information.
+
+
+## [1.2.0] 2026-10-10
+
+### Added
+* Dark mode toggle for user interface.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v1.1.0...v1.2.0)
 
 
 ## [1.1.0] 2026-10-10
