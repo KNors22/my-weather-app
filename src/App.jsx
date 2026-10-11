@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import "./App.css";
+import LocationMap from "./components/LocationMap";
 import {
   getWeatherBundleByCity,
   getWeatherBundleByCoordinates,
@@ -62,6 +63,8 @@ function App() {
   const [city, setCity] = useState("");
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
+  const [mapPosition, setMapPosition] = useState(null);
+  const [mapLocationName, setMapLocationName] = useState("");
 
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
@@ -110,6 +113,11 @@ function App() {
       setWeather(data.weather);
       setForecast(normalizeForecast(data.forecast));
       setCurrentTime(Date.now());
+      setMapPosition({
+        lat: data.weather.coord.lat,
+        lon: data.weather.coord.lon,
+      });
+      setMapLocationName(data.weather.name);
 
       if (!preserveLocation) {
         setDisplayLocation(data.location || {
@@ -125,6 +133,19 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  /**
+   * Copies a clicked map location into the coordinate search fields.
+   *
+   * @param {number} latitude - Selected latitude.
+   * @param {number} longitude - Selected longitude.
+   */
+  const selectMapLocation = (latitude, longitude) => {
+    setLat(latitude.toFixed(6));
+    setLon(longitude.toFixed(6));
+    setMapPosition({ lat: latitude, lon: longitude });
+    setMapLocationName("");
   };
 
   /**
@@ -259,6 +280,12 @@ function App() {
 
               <button type="submit">Search</button>
             </div>
+
+            <LocationMap
+              position={mapPosition}
+              locationName={mapLocationName}
+              onSelect={selectMapLocation}
+            />
           </form>
 
           {/* Units */}

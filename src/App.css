@@ -205,6 +205,65 @@ label {
   gap: 10px;
 }
 
+.location-map-frame {
+  position: relative;
+  z-index: 0;
+  height: 280px;
+  margin-top: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-subtle);
+  isolation: isolate;
+  transition:
+    background-color var(--duration-normal) ease,
+    border-color var(--duration-normal) ease;
+}
+
+.location-map {
+  width: 100%;
+  height: 100%;
+  background: var(--surface-subtle);
+  font-family: inherit;
+}
+
+.leaflet-tile-pane {
+  transition: filter var(--duration-normal) ease;
+}
+
+:root[data-theme="dark"] .leaflet-tile-pane {
+  filter: brightness(0.7) contrast(1.12) saturate(0.75);
+}
+
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  border-color: var(--border-soft);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.leaflet-control-attribution {
+  background: color-mix(in srgb, var(--surface) 84%, transparent) !important;
+  color: var(--text-muted);
+}
+
+.leaflet-control-attribution a {
+  color: var(--accent-hover);
+}
+
+.leaflet-tooltip {
+  border-color: var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--hover-shadow);
+  font-weight: 700;
+}
+
+.leaflet-tooltip-top::before {
+  border-top-color: var(--border);
+}
+
 input {
   width: 100%;
   border: 1px solid var(--border);
@@ -582,6 +641,10 @@ button:active {
 
   .coordinate-inputs button {
     width: 100%;
+  }
+
+  .location-map-frame {
+    height: 230px;
   }
 
   .weather-card {

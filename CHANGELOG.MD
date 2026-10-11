@@ -6,14 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+
+## [1.3.0] 2026-10-10
+
 ### Added
-* Search by map click to allow users to select a location directly on an interactive map for weather information.
+* Interactive map for selecting a weather location.
+* Automatic latitude and longitude input population when clicking the map.
+* Weather-location marker that displays weather.name from OpenWeather.
+* Automatic map recentering after successful city or coordinate searches.
+* OpenStreetMap tiles with required attribution.
+* Leaflet and React Leaflet integration.
+
+### Changed
+* Coordinate searches can now be configured visually using the map.
+* Map selections reuse the existing Search action and do not trigger unnecessary API requests.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v1.2.1...v1.3.0)
 
 
 ## [1.2.1] 2026-10-10
 
 ### Fixed
 * Display the input city name instead of the geocoded city name in the search bar after a successful search.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v1.2.0...v1.2.1)
 
 
 ## [1.2.0] 2026-10-10
