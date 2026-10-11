@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ## [Unreleased]
 
 
+## [1.3.1] 2026-10-10
+
+### Changed
+* Update README.md to include changes from the latest release.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v1.3.0...v1.3.1)
+
+
 ## [1.3.0] 2026-10-10
 
 ### Added

@@ -1,40 +1,47 @@
 # Weather Forecasting App
 
-## Description
+A responsive React weather application that combines OpenWeather current conditions, geocoding, and forecast data. Users can search by city, enter coordinates, or select a location on an interactive map.
 
-This project is a dynamic and visually appealing Weather Forecasting App built with React and the OpenWeatherMap API. The assignment focuses on using a JavaScript front-end framework, integrating external API data, managing React state, and presenting weather information in a modern responsive interface.
+## Live Demo
 
-Users should be able to enter location information, such as a city name or geographic coordinates, and receive current weather data and forecast details from OpenWeatherMap.
+[View the Weather Forecasting App on Netlify](https://andreys-weather-app.netlify.app)
 
 ## Features
 
-* Dynamic weather search by city name or geographic coordinates.
-* Current weather display with temperature, humidity, wind speed, condition text, and weather icons.
-* Five-day weather forecast using OpenWeatherMap forecast data.
-* Celsius and Fahrenheit unit toggle.
-* Responsive layout for desktop, tablet, and mobile screens.
-* Smooth transitions or animations for a more polished user experience.
-* User-friendly error messages for invalid locations, failed requests, and missing API configuration.
+- Search for weather by city name or geographic coordinates.
+- Select coordinates by clicking the interactive map.
+- Preserve canonical city and country names from OpenWeather geocoding.
+- Display current temperature, feels-like temperature, humidity, wind speed, pressure, visibility, condition, and weather icon.
+- Show the searched location's current date, time, and GMT offset.
+- Switch between three-day and five-day forecast views without making additional API requests.
+- Aggregate OpenWeather's three-hour readings into timezone-aware daily high and low forecasts.
+- Switch between metric and imperial units.
+- Use light or dark mode with saved browser preferences and initial system-theme detection.
+- Recenter the map after a successful search and label the marker with OpenWeather's weather-location name.
+- Validate coordinate input and show errors for invalid locations, failed requests, or missing API configuration.
+- Adapt the layout for desktop, tablet, and mobile screens.
+- Respect reduced-motion preferences while providing subtle transitions and animations.
 
-## Technologies Used
+## Technologies
 
-* React
-* Vite
-* JavaScript
-* HTML5
-* CSS3
-* OpenWeatherMap API
-* Fetch API
+- React 19
+- Vite 8
+- JavaScript
+- CSS3
+- OpenWeather API
+- Leaflet and React Leaflet
+- OpenStreetMap tiles
+- Fetch API
 
-## Installation
+## Getting Started
 
 ### Prerequisites
 
-* Node.js
-* npm
-* OpenWeatherMap API key from https://openweathermap.org/api
+- Node.js `20.19+` or `22.12+`
+- npm
+- An [OpenWeather API key](https://openweathermap.org/api)
 
-### Setup
+### Installation
 
 1. Clone the repository:
 
@@ -49,100 +56,101 @@ Users should be able to enter location information, such as a city name or geogr
    npm install
    ```
 
-3. Create a `.env` file in the project root and add your OpenWeatherMap API key:
+3. Create the local environment file from the provided template:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Add your OpenWeather API key to `.env`:
 
    ```env
    VITE_OPENWEATHER_API_KEY=your_api_key_here
    ```
 
+5. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+Open the local URL printed by Vite, normally `http://localhost:5173`.
+
 ## Usage
 
-Start the local development server:
+### Search by city
 
-```bash
-npm run dev
-```
+Enter a city and select **Search**. The app geocodes the city once, then requests current conditions and forecast data concurrently using the resulting coordinates.
 
-Open the local URL shown in the terminal. By default, Vite usually serves the app at:
+### Search by coordinates
 
-```text
-http://localhost:5173
-```
+Enter a latitude from `-90` to `90` and a longitude from `-180` to `180`, then select **Search**.
+
+### Select a map location
+
+Click the interactive map to populate the latitude and longitude fields. Select **Search** to request weather for that position. A map click alone does not make an API request.
+
+### Forecast and units
+
+Use the forecast control to switch between three and five days. The app fetches the forecast once per location and unit system, then changes the visible range locally. Changing units refreshes current conditions and forecast data for the existing coordinates.
 
 ## Available Scripts
 
-```bash
-npm run dev
-```
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the Vite development server. |
+| `npm run build` | Create a production build in `dist/`. |
+| `npm run preview` | Preview the production build locally. |
+| `npm run lint` | Run ESLint across the project. |
 
-Runs the app locally in development mode.
+## API Integration
 
-```bash
-npm run build
-```
+The application uses these OpenWeather endpoints:
 
-Builds the app for production.
+- Direct Geocoding: `https://api.openweathermap.org/geo/1.0/direct`
+- Current Weather: `https://api.openweathermap.org/data/2.5/weather`
+- 5-Day / 3-Hour Forecast: `https://api.openweathermap.org/data/2.5/forecast`
 
-```bash
-npm run preview
-```
+City searches perform one geocoding request followed by concurrent current-weather and forecast requests. Coordinate and map searches skip geocoding. Forecast-duration changes do not make new requests.
 
-Serves the production build locally for preview.
+The interactive map uses OpenStreetMap tiles and displays the required OpenStreetMap attribution.
 
-```bash
-npm run lint
-```
-
-Runs ESLint against the project files.
-
-## OpenWeatherMap API
-
-The app is expected to use OpenWeatherMap endpoints such as:
-
-* Current Weather Data: `https://api.openweathermap.org/data/2.5/weather`
-* 5-Day / 3-Hour Forecast: `https://api.openweathermap.org/data/2.5/forecast`
-
-Common request parameters include:
-
-* `q={city name}`
-* `lat={latitude}`
-* `lon={longitude}`
-* `appid={API key}`
-* `units={metric|imperial}`
-
-## Code Organization
-
-The project uses a Vite React structure:
+## Project Structure
 
 ```text
 my-weather-app/
-├── public/             # Static public assets
-├── src/                # React source code
-│   ├── App.jsx         # Main application component
-│   ├── App.css         # App-specific styles
-│   ├── index.css       # Global styles
-│   ├── main.jsx        # React entry point
-│   └── weatherApi.js   # API integration logic for OpenWeatherMap
-├── index.html          # HTML entry file used by Vite
-├── package.json        # Scripts, dependencies, and project metadata
-├── vite.config.js      # Vite configuration
-├── .env                # Environment variables (e.g. API keys)
-└── README.MD           # Project documentation
+├── src/
+│   ├── components/
+│   │   └── LocationMap.jsx    # Interactive Leaflet map
+│   ├── services/
+│   │   └── weatherApi.js      # OpenWeather request helpers
+│   ├── utils/
+│   │   ├── dateTime.js        # Location date, time, and GMT formatting
+│   │   ├── forecast.js        # Daily forecast normalization and selection
+│   │   └── location.js        # Coordinate validation and city geocoding
+│   ├── App.jsx                # Application state and UI orchestration
+│   ├── App.css                # Component, theme, map, and responsive styles
+│   ├── index.css              # Global baseline styles
+│   └── main.jsx               # React entry point
+├── .env                       # Environment variables (e.g. API keys)
+├── CHANGELOG.MD               # Version history
+├── index.html                 # HTML entry point
+├── package.json               # Dependencies and npm scripts
+└── vite.config.js             # Vite configuration
 ```
 
-As the app is expanded, weather-specific UI and API logic can be organized into folders such as:
+## Deployment
 
-```text
-src/
-├── components/         # SearchBar, WeatherDisplay, Forecast, UnitToggle, ErrorMessage
-├── services/           # OpenWeatherMap API request helpers
-└── assets/             # Images, icons, and other visual assets
-```
+The public application is hosted on Netlify:
 
-## Authors and Acknowledgements
+[https://andreys-weather-app.netlify.app](https://andreys-weather-app.netlify.app)
 
-* Author: Andrey Gonzalez
-* Instructor: Martin Lee from Circuit Stream
+
+## Author and Acknowledgements
+
+- Author: Andrey Gonzalez
+- Instructor: Martin Lee, Circuit Stream
 
 ## License
+
 This project is licensed under the MIT License. See the LICENSE file for details.
