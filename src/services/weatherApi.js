@@ -86,16 +86,28 @@ export function getForecastByCoordinates(lat, lon, units = "metric") {
  *
  * @param {string} city - The city name to search for.
  * @param {string} [units="metric"] - The unit system for returned weather values.
- * @returns {Promise<{weather: Object, forecast: Object}>} Current and forecast data.
+ * @returns {Promise<{
+ *   weather: Object,
+ *   forecast: Object,
+ *   location: {name: string, state: string | undefined, country: string}
+ * }>} Current weather, forecast, and canonical geocoding metadata.
  */
 export async function getWeatherBundleByCity(city, units = "metric") {
   const coordinates = await getCoordinatesByCity(city, API_KEY);
-
-  return getWeatherBundleByCoordinates(
+  const bundle = await getWeatherBundleByCoordinates(
     coordinates.lat,
     coordinates.lon,
     units,
   );
+
+  return {
+    ...bundle,
+    location: {
+      name: coordinates.name,
+      state: coordinates.state,
+      country: coordinates.country,
+    },
+  };
 }
 
 /**

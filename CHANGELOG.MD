@@ -10,6 +10,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 * Search by map click to allow users to select a location directly on an interactive map for weather information.
 
 
+## [1.2.1] 2026-10-10
+
+### Fixed
+* Display the input city name instead of the geocoded city name in the search bar after a successful search.
+
+
 ## [1.2.0] 2026-10-10
 
 ### Added

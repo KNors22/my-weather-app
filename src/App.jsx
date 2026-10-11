@@ -65,6 +65,7 @@ function App() {
 
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
+  const [displayLocation, setDisplayLocation] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [forecastDays, setForecastDays] = useState(3);
   const [currentTime, setCurrentTime] = useState(() => Date.now());
@@ -98,8 +99,9 @@ function App() {
    * Runs a combined weather request and updates weather and forecast state.
    *
    * @param {Function} weatherRequest - Function that returns a weather data promise.
+   * @param {boolean} [preserveLocation=false] - Keep the existing display location.
    */
-  const fetchWeather = async (weatherRequest) => {
+  const fetchWeather = async (weatherRequest, preserveLocation = false) => {
     setLoading(true);
     setError("");
 
@@ -108,8 +110,16 @@ function App() {
       setWeather(data.weather);
       setForecast(normalizeForecast(data.forecast));
       setCurrentTime(Date.now());
+
+      if (!preserveLocation) {
+        setDisplayLocation(data.location || {
+          name: data.weather.name,
+          country: data.weather.sys.country,
+        });
+      }
     } catch (err) {
       setWeather(null);
+      setDisplayLocation(null);
       setForecast([]);
       setError(err.message);
     } finally {
@@ -166,12 +176,14 @@ function App() {
 
     if (!weather) return;
 
-    await fetchWeather(() =>
-      getWeatherBundleByCoordinates(
-        weather.coord.lat,
-        weather.coord.lon,
-        newUnits,
-      ),
+    await fetchWeather(
+      () =>
+        getWeatherBundleByCoordinates(
+          weather.coord.lat,
+          weather.coord.lon,
+          newUnits,
+        ),
+      true,
     );
   };
 
@@ -289,7 +301,8 @@ function App() {
             <div className="weather-header">
               <div>
                 <h2>
-                  {weather.name}, {weather.sys.country}
+                  {displayLocation?.name || weather.name},{" "}
+                  {displayLocation?.country || weather.sys.country}
                 </h2>
 
                 <p className="location-date-time">

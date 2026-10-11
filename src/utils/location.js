@@ -93,6 +93,7 @@ export async function getCoordinatesByCity(city, apiKey) {
     lat: location.lat,
     lon: location.lon,
     name: location.name,
+    state: location.state,
     country: location.country,
   };
 }
