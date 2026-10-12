@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+* Multi-language support for the user interface, allowing users to switch between different languages for a more personalized experience. Default is user's browser language, with English as a fallback.
+* Display sunrise and sunset times for the selected location
+* Clicked tile reveals its weather details in a modal, including temperature, humidity, wind speed, and weather conditions.
+* Same-name city search results are displayed in a modal, allowing users to select the correct location based on additional information such as country and state.
+
+
+## [1.4.1] 2026-10-12
+
+### Added
+* Footer with author, repository, OpenWeather and OpenStreetMap attribution links.
+
+[Full Changelog](https://github.com/knors22/my-weather-app/compare/v1.4.0...v1.4.1)
+
 
 ## [1.4.0] 2026-10-10
 
